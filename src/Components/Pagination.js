@@ -51,7 +51,6 @@ const Pagination = (props) => {
             </li>
           );
         }
-
         return (
           <li
             key={index}

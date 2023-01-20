@@ -16,20 +16,19 @@ class ComponentClass extends React.Component {
 
   handleFilterByName = (e) => {
     const name = e.target.value;
-    console.log(e.target.value);
     if (name) {
-      this.getCommentList(1, 10, name);
+      this.getCommentList(this.state.currentPage, 10, name);
     } else {
-      this.getCommentList(1, 10);
+      this.getCommentList(this.state.currentPage, 10);
     }
   };
 
   handleFilterByBody = (e) => {
     const body = e.target.value;
     if (body) {
-      this.getCommentList(1, 10, null, body);
+      this.getCommentList(this.state.currentPage, 10, null, body);
     } else {
-      this.getCommentList(1, 10);
+      this.getCommentList(this.state.currentPage, 10);
     }
   };
 
@@ -39,7 +38,6 @@ class ComponentClass extends React.Component {
         params: { name, body, _page, _limit },
       })
       .then((res) => {
-        console.log("data", res.data);
         const length = res.headers["x-total-count"];
         this.setState({
           ...this.state,
@@ -53,13 +51,13 @@ class ComponentClass extends React.Component {
   };
 
   componentDidMount() {
-    this.getCommentList(1, 10);
+    this.getCommentList(this.state.currentPage, 10);
   }
 
   render() {
     return (
       <div className="container">
-        <div>full text filter</div>
+        <div>class component full text filter</div>
         <table className="table">
           <thead className="header">
             <tr>

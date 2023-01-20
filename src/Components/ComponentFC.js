@@ -6,12 +6,12 @@ import axios from "axios";
 import Pagination from "./Pagination";
 
 function ComponentFC() {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [commentList, setCommentList] = useState([]);
   const [rowCount, setRowCount] = useState([]);
 
   const currentPage = useMemo(() => {
-    if (searchParams.get("page")) {
+    if (!!searchParams.get("page")) {
       return searchParams.get("page");
     }
     return 1;
@@ -29,22 +29,25 @@ function ComponentFC() {
     (e) => {
       const name = e.target.value;
       if (name) {
-        getCommentList(searchParams.get("page"), 10, name);
+        getCommentList(currentPage, 10, name);
       } else {
-        getCommentList(1, 10);
+        getCommentList(currentPage, 10);
       }
     },
-    [searchParams]
+    [currentPage]
   );
 
-  const handleFilterByBody = useCallback((e) => {
-    const body = e.target.value;
-    if (body) {
-      getCommentList(1, 10, null, body);
-    } else {
-      getCommentList(1, 10);
-    }
-  }, []);
+  const handleFilterByBody = useCallback(
+    (e) => {
+      const body = e.target.value;
+      if (body) {
+        getCommentList(currentPage, 10, null, body);
+      } else {
+        getCommentList(currentPage, 10);
+      }
+    },
+    [currentPage]
+  );
 
   const getCommentList = (_page = 1, _limit = 10, name = null, body = null) => {
     axios
@@ -68,7 +71,7 @@ function ComponentFC() {
 
   return (
     <div className="container">
-      <div>full text filter</div>
+      <div>functional component full text filter</div>
       <table className="table">
         <thead className="header">
           <tr>
@@ -112,7 +115,7 @@ function ComponentFC() {
       <div className="pagination">
         <Pagination
           className="pagination-bar"
-          currentPage={currentPage}
+          currentPage={Number(currentPage)}
           totalCount={rowCount}
           pageSize={10}
           onPageChange={(page) => handleClickPage(page)}
